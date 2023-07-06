@@ -1,0 +1,60 @@
+{
+    "responseId": "e0cc41cc-dbf5-4ba4-8d6d-c32f802816c7-a4910cec",
+    "queryResult": {
+        "queryText": "karaoke: 2023-06-23 time: 11:23",
+        "parameters": {
+            "date": "2023-06-23",
+            "time": "11:23"
+        },
+        "allRequiredParamsPresent": true,
+        "fulfillmentText": "จองวันที่ 2023-06-23\nเวลา 11:23",
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "จองวันที่ 2023-06-23\nเวลา 11:23"
+                    ]
+                }
+            }
+        ],
+        "outputContexts": [
+            {
+                "name": "projects/aiagent-svjs/agent/sessions/53de0376-6314-3f44-a7be-34610742f74d/contexts/__system_counters__",
+                "parameters": {
+                    "no-input": 0,
+                    "no-match": 0,
+                    "date": "2023-06-23",
+                    "date.original": "2023-06-23",
+                    "time": "11:23",
+                    "time.original": "11:23"
+                }
+            }
+        ],
+        "intent": {
+            "name": "projects/aiagent-svjs/agent/intents/50f76ab7-3afc-4e44-bb7c-9d08ebfa8d0b",
+            "displayName": "karaokeBooking"
+        },
+        "intentDetectionConfidence": 0.63484913,
+        "languageCode": "th"
+    },
+    "originalDetectIntentRequest": {
+        "source": "line",
+        "payload": {
+            "data": {
+                "replyToken": "5c15ba0caa664653bf95d4908cd72690",
+                "type": "message",
+                "timestamp": "1687062406837",
+                "message": {
+                    "id": "460083444325286356",
+                    "type": "text",
+                    "text": "karaoke: 2023-06-23 time: 11:23"
+                },
+                "source": {
+                    "userId": "Ubfddf51401a29bc3a7feed4d05ba4382",
+                    "type": "user"
+                }
+            }
+        }
+    },
+    "session": "projects/aiagent-svjs/agent/sessions/53de0376-6314-3f44-a7be-34610742f74d"
+}

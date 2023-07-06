@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจอง</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <h1>ระบบจอง</h1>
+    <hr>
+    <div class="box">
+        <label for="bookdate">วันที่</label>
+        <input type="date" id="bookdate" /><br>
+        <label for="booktime">เวลา</label>
+        <input type="time" id="booktime"><br>
+        <button onclick="booking()">จอง</button>
+    </div>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        liff.init({ liffId: "<< Liff ID >>" }, () => {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            }
+        }, err => console.error(err.code, error.message));
+
+        function booking() {
+            let bookdate = document.getElementById('bookdate').value;
+            let booktime = document.getElementById('booktime').value;
+            let msg = "karaoke: " + bookdate + " time: " + booktime;
+            console.log(msg);
+            liff.sendMessages([
+                {
+                    type: "text",
+                    text: msg,
+                },
+            ])
+                .then(() => {
+                    console.log("message sent");
+                    liff.closeWindow();
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                    liff.closeWindow();
+                });
+
+        }
+    </script>
+</body>
+
+</html>

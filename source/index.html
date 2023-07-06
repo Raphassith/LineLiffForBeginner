@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppBot</title>
+    <style>
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .box {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Test Liff App</h1>
+    <div class="box">
+        <label for="msg">Message</label>
+        <input type="text" id="msg" />
+        <button type="button" id="btn" onclick="sendMsg()">Submit</button>
+    </div>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        liff.init({ liffId: "2000059228-3K9P79RB" }, () => {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            }
+        }, err => console.error(err.code, error.message));
+
+        function sendMsg() {
+            let msg = document.getElementById('msg').value;
+            liff.sendMessages([
+                {
+                    type: "text",
+                    text: msg,
+                },
+            ])
+                .then(() => {
+                    console.log("message sent");
+                    liff.closeWindow();
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                    liff.closeWindow();
+                });
+        }
+    </script>
+
+</body>
+
+</html>
