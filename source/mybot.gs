@@ -20,10 +20,32 @@ function saveRate(data){
   return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
 }
 
-function doPost(e){
+function saveRegis(data) {
+  let sid = data.queryResult.parameters.id;
+  let userId = data.originalDetectIntentRequest.payload.data.source.userId;
+  SpreadsheetApp.openById(ssid).getSheetByName('regis').appendRow([userId, sid]);
+
+  let result = {
+    "fulfillmentMessages": [
+      {
+        "platform": "line", "type": 4, "payload": {
+          "line": {
+            "type": "text",
+            "text": "เราได้ทำการลงทะเบียนเรียบร้อยแล้วค่ะ"
+          }
+        }
+      }]
+  };
+
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
   let data = JSON.parse(e.postData.contents);
   let fn = parseInt(data.queryResult.parameters.fn);
-  if(fn==1){
+  if (fn == 1) {
     return saveRate(data);
+  } else if(fn == 2){
+    saveRegis(data);
   }
 }
