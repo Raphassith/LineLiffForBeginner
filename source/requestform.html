@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Form</title>
+    <style>
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .box {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>แจ้งปัญหา</h1>
+    <hr>
+    <div class="box">
+        <input type="text" id="subject" value="" placeholder="เรื่องที่แจ้ง">
+        <textarea id="detail" cols="30" rows="10" placeholder="อธิบาบ"></textarea>
+        <button onclick="saveRequest()">ส่งเรื่อง</button>
+    </div>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        var userId = 'A001';
+        var photo = 'https://m.media-amazon.com/images/I/71zTE0u2iXL._AC_UY1100_.jpg';
+        var name = 'Anonymous';
+
+        function setLineUser() {
+            liff.getProfile()
+                .then((profile) => {
+                    userId = profile.userId;
+                    photo = profile.pictureUrl;
+                    name = profile.displayName;
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                });
+        }
+
+        liff.init({ liffId: "<< LIFF ID >>" }, () => {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                setLineUser();
+            }
+        }, (err) => {
+            // Error happens during initialization
+            console.log(err.code, err.message);
+        });
+
+        function saveRequest() {
+            let subject = document.getElementById('subject').value;
+            let detail = document.getElementById('detail').value;
+
+            let raw = {
+                "userId": userId,
+                "photo": photo,
+                "name": name,
+                "subject": subject,
+                "detail": detail
+            };
+
+            let options = {
+                method: 'POST',
+                redirect: 'follow',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(raw)
+            }
+
+            fetch('https://script.google.com/macros/s/AKfycbxplr5jDQodX_0OKuXfePJRZT-zEUOO3aWj3LP4odOvNWsT7Voydp_gseN2_FHOQH4-/exec', options)
+                .then(responese => responese.json())
+                .then(result => { alert('เสร็จสิ้น'); liff.closeWindow(); })
+                .catch(err => { alert('ผิดพลาด'); liff.closeWindow(); });
+        }
+
+    </script>
+
+</body>
+
+</html>
