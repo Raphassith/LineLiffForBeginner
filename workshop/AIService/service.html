@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แจ้งซ้อมออนไลน์</title>
+    <style>
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .box {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ระบบแจ้งซ้อมออนไลน์</h1>
+    <hr>
+    <div class="box">
+        <label for="subject">เรื่องที่แจ้ง</label>
+        <input type="text" id="subject" />
+        <label for="detail">อาการ</label>
+        <textarea id="detail" rows="5"></textarea>
+        <label for="img">ภาพอาการ</label>
+        <input type="file" id="img" accept="image/*" />
+        <label for="area">สถานที่</label>
+        <input type="text" id="area" />
+        <label for="requseter">ผู้แจ้งเรื่อง</label>
+        <input type="text" id="requseter" />
+        <label for="phone">หมายเลขโทรศัพท์</label>
+        <input type="tel" id="phone" />
+        <button id="btn" onclick="sendRequest()">ส่งข้อมูล</button>
+    </div>
+
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        var userId = "Anonymous";
+        var displayName = "Anonymous";
+        var pictureUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Anonymous_emblem.svg/800px-Anonymous_emblem.svg.png";
+
+        function sendRequest() {
+            let subject = document.getElementById('subject').value;
+            let detail = document.getElementById('detail').value;
+            let img = document.getElementById('img').files[0];
+            let area = document.getElementById('area').value;
+            let requseter = document.getElementById('requseter').value;
+            let phone = document.getElementById('phone').value;
+            let reader = new FileReader();
+
+
+            if (subject == "" || subject == null) alert('กรุณากรอกเรื่องที่แจ้ง');
+            else if (detail == "" || detail == null) alert('กรุณากรอกอาการ');
+            else if (img == undefined) alert('กรุณาเลือกภาพอาการ');
+            else if (area == "" || area == null) alert('กรุณากรอกสถานที่');
+            else if (requseter == "" || requseter == null) alert('กรุณากรอกชื่อผู้แจ้ง');
+            else if (phone == "" || phone == null) alert('กรุณากรอกหมายเลขโทรศัพท์');
+            else {
+                document.getElementById("btn").disabled = true;
+                document.getElementById("btn").innerHTML = "Loading...";
+                document.getElementById("btn").style.backgroundColor = "gray";
+                reader.readAsDataURL(img);
+                reader.onload = () => {
+                    let rawLog = reader.result.split(',')[1];
+                    let raw = {
+                        'userId': userId,
+                        'displayName': displayName,
+                        'pictureUrl': pictureUrl,
+                        'subject': subject,
+                        'detail': detail,
+                        'area': area,
+                        'requseter': requseter,
+                        'phone': phone,
+                        'rawLog': rawLog,
+                        'filetype': img.type
+                    };
+
+                    let options = {
+                        method: 'POST',
+                        redirect: 'follow',
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
+                        body: JSON.stringify(raw)
+                    };
+
+                    fetch("<< API URL >>", options)
+                        .then(response => response.json())
+                        .then(result => {
+                            console.log(result);
+                            alert('ส่งข้อมูลเสร็จสิ้น');
+                            liff.closeWindow();
+                        })
+                        .catch(error => {
+                            console.log('error', error);
+                            alert('ดำเนินการผิดพลาด');
+                            liff.closeWindow();
+                        });
+                }
+            }
+
+        }
+
+        function getLineUser() {
+            liff.getProfile()
+                .then((profile) => {
+                    userId = profile.userId;
+                    displayName = profile.displayName;
+                    pictureUrl = profile.pictureUrl;
+                })
+                .catch((err) => {
+                    console.log("error", err);
+                });
+        }
+
+        liff.init({ liffId: "<< LIFF ID >>" }, () => {
+            if (liff.isLoggedIn()) getLineUser();
+            else liff.login();
+        }, err => {
+            console.error(err.code, error.message);
+        });
+    </script>
+
+</body>
+
+</html>
