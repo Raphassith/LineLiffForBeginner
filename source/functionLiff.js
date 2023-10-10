@@ -35,3 +35,14 @@ liff.init({ liffId: "<< Liff ID >>" }, () => {
 }, err => {
     console.error(err.code, error.message);
 });
+
+// URL: https://liff.line.me/liff-id/getparam.html?param=1
+liff.init({ liffId: "<< LIFF ID >>" }, () => {
+    if (!liff.isLoggedIn()) {
+        let destinationUrl = window.location.href;
+        liff.login({ redirectUri: destinationUrl });
+    } else {
+        let urlParams = new URLSearchParams(window.location.search);
+        console.log(urlParams.get('param'));
+    }
+});Ï
