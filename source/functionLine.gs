@@ -18,7 +18,14 @@ function pushMessage() {
       {
         "type": "text",
         "text": "Hello World 2"
-      }
+      },
+      //{
+      //  "type": "flex",
+      //  "altText": "Flex Message",
+      //  "contents": {
+      //    << JSON Flex Message Design >>
+      //  }
+      //}
     ]
   };
 
