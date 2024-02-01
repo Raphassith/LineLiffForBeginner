@@ -45,4 +45,4 @@ liff.init({ liffId: "<< LIFF ID >>" }, () => {
         let urlParams = new URLSearchParams(window.location.search);
         console.log(urlParams.get('param'));
     }
-});Ï
+});
